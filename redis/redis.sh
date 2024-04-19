@@ -26,4 +26,6 @@ redis-cli -c
 cluster info
 cluster nodes
 
-
+xcopy /s /e /y .\docker\redis\node-1\* node-2\
+xcopy /s /e /y .\docker\redis\node-1\* .\docker\redis\node-2\
+xcopy /s /e /y .\docker\redis\node-1\* .\docker\redis\node-3\

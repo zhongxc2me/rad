@@ -92,20 +92,20 @@ sudo /usr/local/mysql/bin/mysqld --initialize --user=mysql
 # temporary password is generated for root@localhost: Ij9JpyTheV.v
 
 # 启动MySQL服务
-/usr/local/mysql/support-files/mysql.server start
+/usr/local/mysql/support-files/mysql.server start > /dev/null 2>&1
 
 #  配置环境变量
 echo 'export PATH=$PATH:/usr/local/mysql/bin' >> ~/.bashrc
 source ~/.bashrc
 
 # 运行安全设置脚本
+echo "-----------------------------"
 echo "run the security setup script"
-echo "/usr/local/mysql/bin/mysql_secure_installation \n\n"
+echo -e "/usr/local/mysql/bin/mysql_secure_installation "
+echo -e "-----------------------------\n"
 
-
-echo "use mysql -uroot -p test login."
+echo "use mysql -uroot -p login."
 echo "done."
-
 
 
 
