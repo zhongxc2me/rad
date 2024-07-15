@@ -1,4 +1,4 @@
-### 配置自启动
+### MySQL配置自启动
 vim /etc/systemd/system/mysqld.service
 
 ```
@@ -22,16 +22,11 @@ sudo systemctl daemon-reload
 #### 设置开机自启
 sudo systemctl enable mysqld
 
-### 修改root远程访问权限
+### MySQL修改root远程访问权限
 ```
 mysql -u root -p
-
 use mysql;
-
 select host, user from user;
-
 update user set host='%' where user='root';
-
 flush privileges;
-
 ```
