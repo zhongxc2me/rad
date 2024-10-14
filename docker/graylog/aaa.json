@@ -1,0 +1,1 @@
+{"express_kind":[{"key":"sf","title":"顺丰"},{"key":"jd","title":"京东"}],"defaults":{"express_kind":"sf"},"express_pay_type":[{"key":"1","title":"在线支付"},{"key":"2","title":"到付"}]}

@@ -1,0 +1,32 @@
+services:
+  redis:
+    image: redis
+    restart: always
+    container_name: redis01
+    ports:
+      - 6379:6379
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - /opt/docker/redis/data:/usr/local/redis/data
+      - /opt/docker/redis/logs:/usr/local/redis/logs
+      - /opt/docker/redis/conf/redis.conf:/usr/local/redis/conf/redis.conf
+    command: ["redis-server", "/usr/local/redis/conf/redis.conf"]
+
+
+
+# yum provides "*bin/redis-cli"
+
+# rw、ro 和 不指定 的 区别
+#   不指定（默认）权限同rw
+# ro
+#   文件：容器内不能修改，会提示read-only
+#   文件夹：容器内不能修改、新增、删除文件夹中的文件，会提示read-only
+# rw
+#   文件：不管是宿主机还是容器内修改，都会相互同步；但容器内不允许删除，会提示Device or resource busy；宿主机删除文件，容器内的不会被同步
+#   文件夹：不管是宿主机还是容器内修改、新增、删除文件，都会相互同步
+
+# 强制删除正在运行的容器
+# docker rm -rf $(docker ps -qa)
+
+# redis-cli -c -h 192.168.98.137 -p 6379 -a test123456 

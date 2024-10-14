@@ -14,7 +14,7 @@ do \
 docker rm $(docker stop redis-${i})
 done
 
-cp //mnt/hgfs/shares/docker/ /
+cp /mnt/hgfs/shares/docker/ /
 
 
 ## 创建集群

@@ -1,0 +1,65 @@
+services:
+  # 主
+  mysql-master:
+    image: mysql:8.4.2
+    container_name: mysql-master
+    # network_mode: host
+    privileged: true
+    environment:
+      - "MYSQL_ROOT_PASSWORD=123456"
+      - "TZ=Asia/Shanghai"
+    networks:
+      - mysql
+    volumes:
+      - /opt/docker/mysql/master/data:/var/lib/mysql
+      - /opt/docker/mysql/master/conf:/etc/mysql/conf.d
+    ports:
+      - 53306:3306
+  # 从1
+  mysql-slave01:
+    image: mysql:8.4.2
+    container_name: mysql-slave01
+    # network_mode: host
+    privileged: true
+    environment:
+      - "MYSQL_ROOT_PASSWORD=123456"
+      - "TZ=Asia/Shanghai"
+    networks:
+      - mysql
+    volumes:
+      - /opt/docker/mysql/slave01/data:/var/lib/mysql
+      - /opt/docker/mysql/slave01/conf:/etc/mysql/conf.d
+    # links:
+    #   - mysql-master:mysql-master
+    # depends_on:
+    #   - mysql-master
+    ports:
+      - 53307:3306
+  # 从2
+  mysql-slave02:
+    image: mysql:8.4.2
+    container_name: mysql-slave02
+    # network_mode: host
+    privileged: true
+    environment:
+      - "MYSQL_ROOT_PASSWORD=123456"
+      - "TZ=Asia/Shanghai"
+    networks:
+      - mysql
+    volumes:
+      - /opt/docker/mysql/slave02/data:/var/lib/mysql
+      - /opt/docker/mysql/slave02/conf:/etc/mysql/conf.d
+    # links:
+    #   - mysql-master:mysql-master
+    # depends_on:
+    #   - mysql-master
+    ports:
+      - 53308:3306
+
+networks:
+  mysql:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.10.0.0/16"

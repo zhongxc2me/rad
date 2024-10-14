@@ -3,7 +3,7 @@
 ## https://dev.mysql.com/downloads/mysql/
 ## Ubuntu install mysql 8.0.38
 
-apt install build-essential bison libncurses5-dev libssl-dev pkg-config libtirpc-dev
+apt install build-essential cmake bison libncurses5-dev libssl-dev pkg-config libtirpc-dev
 
 # 检查mysql用户组是否存在
 if ! getent group mysql > /dev/null; then
@@ -22,23 +22,23 @@ else
     echo "用户mysql已存在"
 fi
 
-cd /opt
+# cd /opt
 
-## install cmake
-if [ ! -f "cmake-3.25.0.tar.gz" ]; then 
-    # file not found, download
-    wget https://github.com/Kitware/CMake/releases/download/v3.25.0/cmake-3.25.0.tar.gz
-    echo "cmake下载完毕."
-fi
+# ## install cmake
+# if [ ! -f "cmake-3.25.0.tar.gz" ]; then 
+#     # file not found, download
+#     wget https://github.com/Kitware/CMake/releases/download/v3.25.0/cmake-3.25.0.tar.gz
+#     echo "cmake下载完毕."
+# fi
 
-if [ -d "cmake-3.25.0" ]; then 
-    echo "cmake-3.25.0 目录已存在, 删除."
-    rm -rf cmake-3.25.0
-fi
+# if [ -d "cmake-3.25.0" ]; then 
+#     echo "cmake-3.25.0 目录已存在, 删除."
+#     rm -rf cmake-3.25.0
+# fi
 
-tar xvf cmake-3.25.0.tar.gz
-cd cmake-3.25.0 && ./configure
-gmake && make install
+# tar xvf cmake-3.25.0.tar.gz
+# cd cmake-3.25.0 && ./configure
+# gmake && make install
 
 cd /opt
 
@@ -73,7 +73,7 @@ if [ -d "mysql-8.0.38" ]; then
 fi
 
 ## 解压
-tar mysql-8.0.38.tar.gz && cd mysql-8.0.38
+tar zxvf mysql-8.0.38.tar.gz && cd mysql-8.0.38
 
 cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
 -DMYSQL_UNIX_ADDR=/data/mysql/mysql.sock \
@@ -107,6 +107,12 @@ sudo chown -R mysql:mysql /usr/local/mysql
 # 初始化数据库
 /usr/local/mysql/bin/mysqld --initialize --user=mysql 
 # --basedir=/usr/local/mysql --datadir=/data/mysql
+
+# root@webserver:/# /usr/local/mysql/bin/mysqld --initialize --user=mysql
+# 2024-07-16T05:47:17.208787Z 0 [System] [MY-013169] [Server] /usr/local/mysql/bin/mysqld (mysqld 8.0.38) initializing of server in progress as process 124068
+# 2024-07-16T05:47:17.218402Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+# 2024-07-16T05:47:17.512013Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+# 2024-07-16T05:47:18.601195Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: vs;fk:h&d1eZ
 
 # 启动MySQL服务
 /usr/local/mysql/support-files/mysql.server start > /dev/null 2>&1

@@ -1,0 +1,24 @@
+services:
+  graylog:
+    image: graylog/graylog:4.2-jre11
+    environment:
+      - GRAYLOG_ELASTICSEARCH_HOSTS=http://192.168.98.130:9200
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9000/
+      - GRAYLOG_ROOT_TIMEZONE=Asia/Shanghai
+      # 密码盐值，随便改
+      - GRAYLOG_PASSWORD_SECRET=gr8r3hbnvfs73b8wefhweufpokdnc
+      - GRAYLOG_ROOT_USERNAME=admin
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+      # Syslog TCP
+      - 1514:1514
+      # Syslog UDP
+      - 1514:1514/udp
+      # Raw/Plaintext TCP 
+      - 5044:5044
+      # GELF TCP
+      - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp

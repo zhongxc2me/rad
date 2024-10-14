@@ -1,0 +1,60 @@
+# 该属性已过时，在最新的版本中Docker Compose，不再需要指定版本号
+# version: '3'
+
+services:
+  #MongoDB: https://hub.docker.com/_/mongo/
+  mongodb:
+    restart: always
+    image: mongo:4.4.6
+  #Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/7.10/docker.html
+  elasticsearch:
+    restart: always
+    image: elasticsearch:7.13.2
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Des.logging.level=ERROR -Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+  #Graylog: https://hub.docker.com/r/graylog/graylog/
+  graylog:
+    image: graylog/graylog:4.2-jre11
+    environment:
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9000/
+      - GRAYLOG_ROOT_TIMEZONE=Asia/Shanghai
+      # 密码盐值，随便改
+      - GRAYLOG_PASSWORD_SECRET=gr8r3hbnvfs73b8wefhweufpokdnc
+      - GRAYLOG_ROOT_USERNAME=admin
+      # 密码需要填写 SHA256 加密的密文，例如这里是 admin
+      # echo -n admin | shasum -a 256
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+    links:
+      - mongodb:mongo
+      - elasticsearch
+    restart: always
+    depends_on:
+      - mongodb
+      - elasticsearch
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+      # Syslog TCP
+      - 1514:1514
+      # Syslog UDP
+      - 1514:1514/udp
+      - 5044:5044
+      - 12201:12201
+      - 12201:12201/udp
+# Volumes for persisting data, see https://docs.docker.com/engine/admin/volumes/volumes/
+volumes:
+  mongo_data:
+    driver: local
+  es_data:
+    driver: local
+  graylog_data:
+    driver: local

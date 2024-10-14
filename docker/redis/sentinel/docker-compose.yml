@@ -1,0 +1,90 @@
+networks:
+  redis-replication:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/24
+
+services:
+  # 主
+  master:
+    image: redis
+    container_name: redis-master
+    restart: always
+    command: ["redis-server", "/etc/redis.conf"]
+    ports:
+      - 6390:6379
+    volumes:
+      - "/opt/docker/redis/sentinel_with_network/redis1.conf:/etc/redis.conf"
+      - "/opt/docker/redis/sentinel_with_network/data1:/data"
+    networks:
+      redis-replication:
+        ipv4_address: 172.25.0.101
+
+  # 从1
+  slave1:
+    image: redis
+    container_name: redis-slave1
+    restart: always
+    command: ["redis-server", "/etc/redis.conf"]
+    ports:
+      - 6391:6379
+    volumes:
+      - "/opt/docker/redis/sentinel_with_network/redis2.conf:/etc/redis.conf"
+      - "/opt/docker/redis/sentinel_with_network/data2:/data"
+    networks:
+      redis-replication:
+        ipv4_address: 172.25.0.102
+  # 从2
+  slave2:
+    image: redis
+    container_name: redis-slave2
+    restart: always
+    command: ["redis-server", "/etc/redis.conf"]
+    ports:
+      - 6392:6379
+    volumes:
+      - "/opt/docker/redis/sentinel_with_network/redis3.conf:/etc/redis.conf"
+      - "/opt/docker/redis/sentinel_with_network/data3:/data"
+    networks:
+      redis-replication:
+        ipv4_address: 172.25.0.103
+  
+  # 哨兵1
+  sentinel1:
+    image: redis
+    container_name: redis-sentinel1
+    restart: always
+    ports:
+      - 26380:26379
+    command: ["/bin/bash", "-c", "cp /etc/sentinel.conf /sentinel.conf && redis-sentinel /sentinel.conf"]
+    volumes:
+      - /opt/docker/redis/sentinel_with_network/sentinel1.conf:/etc/sentinel.conf
+    networks:
+      redis-replication:
+        ipv4_address: 172.25.0.201
+  # 哨兵2
+  sentinel2:
+    image: redis
+    container_name: redis-sentinel2
+    restart: always
+    ports:
+    - 26381:26379
+    command: ["/bin/bash", "-c", "cp /etc/sentinel.conf /sentinel.conf && redis-sentinel /sentinel.conf"]
+    volumes:
+      - /opt/docker/redis/sentinel_with_network/sentinel2.conf:/etc/sentinel.conf
+    networks:
+      redis-replication:
+        ipv4_address: 172.25.0.202
+  # 哨兵3
+  sentinel3:
+    image: redis
+    container_name: redis-sentinel3
+    ports:
+      - 26382:26379
+    command: ["/bin/bash", "-c", "cp /etc/sentinel.conf /sentinel.conf && redis-sentinel /sentinel.conf"]
+    volumes:
+      - /opt/docker/redis/sentinel_with_network/sentinel3.conf:/etc/sentinel.conf
+    networks:
+      redis-replication:
+        ipv4_address: 172.25.0.203
