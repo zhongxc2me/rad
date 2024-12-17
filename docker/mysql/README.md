@@ -189,9 +189,17 @@ CREATE USER 'zhongxc'@'%' IDENTIFIED WITH mysql_native_password BY '123456';
 
 -- 授予权限
 GRANT SELECT, INSERT, UPDATE, DELETE ON myDatabase.* TO 'zhongxc'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE ON `mall-pms`.* TO 'zhongxc'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE ON `my_admin`.* TO 'zhongxc'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE ON `my_home`.* TO 'zhongxc'@'%';
+
+--撤销数据库访问权限
+REVOKE SELECT, INSERT, UPDATE, DELETE ON `your_database`.* FROM 'zhongxc'@'%';
 
 -- 刷新权限
 FLUSH PRIVILEGES;
+
+SHOW GRANTS FOR 'zhongxc'@'%';
 
 
 ```
